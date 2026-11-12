@@ -105,7 +105,13 @@ public class UrlShortenerService {
         }
 
         link.incrementClicks();
-        if (link.isClickLimitExhausted()) {
+        int remaining = link.getMaxClicks() - link.getClickCount();
+        if (remaining == 1) {
+            notificationService.notify(link.getOwnerId(),
+                    "Внимание: по ссылке " + buildShortUrl(code)
+                            + " остался последний переход (" + link.getClickCount() + "/"
+                            + link.getMaxClicks() + "). После него ссылка станет недоступной.");
+        } else if (remaining == 0) {
             notificationService.notify(link.getOwnerId(),
                     "Переходы по ссылке " + buildShortUrl(code) + " закончились: достигнут лимит "
                             + link.getMaxClicks() + ". Ссылка больше недоступна.");

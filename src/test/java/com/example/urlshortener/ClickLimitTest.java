@@ -104,4 +104,22 @@ class ClickLimitTest {
         service.updateMaxClicks(user, code, 3);
         assertEquals("https://example.com/e", service.resolve(code));
     }
+
+    @Test
+    void ownerIsWarnedWhenOneClickRemains() {
+        UUID user = UUID.randomUUID();
+        String shortUrl = service.shorten(user, "https://example.com/warn", 3);
+        String code = codeOf(shortUrl);
+
+        service.resolve(code); // осталось 2 — предупреждения нет
+        assertTrue(notifications.stream().noneMatch(m -> m.contains("последний переход")),
+                "при двух оставшихся переходах предупреждения быть не должно");
+
+        service.resolve(code); // остался 1 — предупреждение
+        assertTrue(notifications.stream().anyMatch(m -> m.contains("последний переход")),
+                "когда остаётся один переход, владелец должен получить предупреждение");
+
+        service.resolve(code); // лимит исчерпан — финальное уведомление
+        assertTrue(notifications.stream().anyMatch(m -> m.contains("закончились")));
+    }
 }
