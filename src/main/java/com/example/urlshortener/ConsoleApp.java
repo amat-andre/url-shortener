@@ -92,7 +92,12 @@ public class ConsoleApp {
     }
 
     private void login(String arg) {
-        currentUserId = UUID.fromString(arg.trim());
+        try {
+            currentUserId = UUID.fromString(arg.trim());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Некорректный UUID. Пример: login 11111111-2222-3333-4444-555555555555");
+            return;
+        }
         System.out.println("Вы вошли как пользователь " + currentUserId);
     }
 
@@ -104,7 +109,12 @@ public class ConsoleApp {
         String[] parts = url.split("\\s+");
         int maxClicks = 0;
         if (parts.length > 1) {
-            maxClicks = Integer.parseInt(parts[1]);
+            try {
+                maxClicks = Integer.parseInt(parts[1]);
+            } catch (NumberFormatException e) {
+                System.out.println("Лимит должен быть целым числом, например: create https://example.com 10");
+                return;
+            }
         }
         if (currentUserId == null) {
             currentUserId = UUID.randomUUID();
@@ -153,8 +163,14 @@ public class ConsoleApp {
             System.out.println("Использование: limit <код ссылки> <новый лимит>");
             return;
         }
-        service.updateMaxClicks(currentUserId, service.extractCode(parts[0]),
-                Integer.parseInt(parts[1]));
+        int newLimit;
+        try {
+            newLimit = Integer.parseInt(parts[1]);
+        } catch (NumberFormatException e) {
+            System.out.println("Лимит должен быть целым числом, например: limit " + parts[0] + " 10");
+            return;
+        }
+        service.updateMaxClicks(currentUserId, service.extractCode(parts[0]), newLimit);
         System.out.println("Лимит обновлён.");
     }
 

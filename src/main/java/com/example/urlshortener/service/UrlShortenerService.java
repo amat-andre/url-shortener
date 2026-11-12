@@ -177,9 +177,20 @@ public class UrlShortenerService {
         if (url == null || url.isBlank()) {
             throw new IllegalArgumentException("URL не может быть пустым");
         }
+        if (url.chars().anyMatch(Character::isWhitespace)) {
+            throw new IllegalArgumentException("URL не должен содержать пробелы: " + url);
+        }
         String lower = url.toLowerCase();
         if (!lower.startsWith("http://") && !lower.startsWith("https://")) {
             throw new IllegalArgumentException("URL должен начинаться с http:// или https://");
+        }
+        try {
+            java.net.URI uri = new java.net.URI(url);
+            if (uri.getHost() == null || uri.getHost().isBlank()) {
+                throw new IllegalArgumentException("В URL отсутствует хост: " + url);
+            }
+        } catch (java.net.URISyntaxException e) {
+            throw new IllegalArgumentException("Некорректный URL: " + url);
         }
     }
 

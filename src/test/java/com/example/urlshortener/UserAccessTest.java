@@ -77,4 +77,20 @@ class UserAccessTest {
         assertEquals(1, service.listUserLinks(alice).size());
         assertEquals(2, service.listUserLinks(bob).size());
     }
+
+    @Test
+    void oneUserCanHaveManyLinksAndTheyAreIndependent() {
+        UUID user = UUID.randomUUID();
+        String code1 = service.extractCode(service.shorten(user, "https://example.com/p1", 1));
+        String code2 = service.extractCode(service.shorten(user, "https://example.com/p2", 5));
+        String code3 = service.extractCode(service.shorten(user, "https://example.com/p3", 5));
+
+        assertEquals(3, service.listUserLinks(user).size());
+
+        // исчерпание лимита одной ссылки не влияет на остальные
+        service.resolve(code1);
+        assertThrows(UrlShortenerService.ClickLimitException.class, () -> service.resolve(code1));
+        assertEquals("https://example.com/p2", service.resolve(code2));
+        assertEquals("https://example.com/p3", service.resolve(code3));
+    }
 }
