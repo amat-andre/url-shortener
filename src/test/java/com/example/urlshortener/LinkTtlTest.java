@@ -20,7 +20,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Этап 2.3: время жизни ссылки — TTL задаётся системой,
+ * Время жизни ссылки: TTL задаётся системой,
  * «протухшие» ссылки удаляются, владелец уведомляется.
  */
 class LinkTtlTest {

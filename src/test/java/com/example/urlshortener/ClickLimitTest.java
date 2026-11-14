@@ -18,7 +18,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Этап 2.2: лимит переходов — учёт кликов, блокировка и уведомление.
+ * Лимит переходов: учёт кликов, блокировка и уведомления владельца.
  */
 class ClickLimitTest {
 

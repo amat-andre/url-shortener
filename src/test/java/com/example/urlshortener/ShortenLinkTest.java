@@ -17,7 +17,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Этап 2.1: сокращение ссылок и уникальность для разных пользователей.
+ * Сокращение ссылок: формат кода и уникальность для разных пользователей.
  */
 class ShortenLinkTest {
 

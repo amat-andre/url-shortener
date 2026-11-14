@@ -16,7 +16,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Этап 2.4: идентификация пользователя по UUID —
+ * Идентификация пользователя по UUID:
  * редактирование и удаление доступны только создателю ссылки.
  */
 class UserAccessTest {
